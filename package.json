@@ -1,6 +1,6 @@
 {
   "name": "nestjs-saga",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Implementation of saga pattern for NestJS",
   "main": "index.js",
   "scripts": {
