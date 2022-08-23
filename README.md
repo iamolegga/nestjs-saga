@@ -55,7 +55,7 @@ class FooSaga {
   // some value use: Builder<FooSagaCommand, FooSagaResult>
   saga = new Builder<FooSagaCommand>()
 
-    // Add step with the name, invocation and compensation functions
+    // Add a step with the name, invocation and compensation functions
     .step('do something')
     .invoke(this.step1)
     .withCompensation(this.step1Compensation)
@@ -82,24 +82,24 @@ class FooSaga {
     this.step1Result = 42;
   }
 
-  // If step throws error the compensation chain is started in a reverse order:
+  // If step throws error then compensation chain is started in a reverse order:
   // step1 -> step2 -> step3(X) -> compensation2 -> compensation1
   step2(cmd: FooSagaCommand) {
     if (this.step1Result != 42) throw new Error('oh no!');
   }
 
   // After all compensations are done `SagaInvocationError` is thrown. It will
-  // wrap the original error and it can be accessed by the `originalError` field
+  // wrap original error which can be accessed by `originalError` field
   step1Compensation(cmd: FooSagaCommand) {
 
-    // If one of compensations throws error the compensations chain is stopped
-    // and `SagaCompensationError` is thrown. It will wrap the original error
-    // and it can be accessed by the `originalError` field
+    // If one of compensations throws error then compensations chain is stopped
+    // and `SagaCompensationError` is thrown. It will wrap original error which
+    // can be accessed by `originalError` field
     if (this.step1Result != 42) throw new Error('oh no!');
   }
 
-  // if saga should return some result pass it's type to the Builder generic and
-  // use `return` method in the build chain with the callback that returns this
+  // If saga should return some result pass it's type to the Builder generic and
+  // use `return` method in the build chain with a callback that returns this
   // class or type
   buildResult(cmd: FooSagaCommand): Result | Promise<Result> {
     return new Result();
