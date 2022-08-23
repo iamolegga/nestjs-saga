@@ -1,0 +1,72 @@
+{
+  "name": "nestjs-saga",
+  "version": "0.1.0",
+  "description": "Implementation of saga pattern for NestJS microservices",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --verbose -i --detectOpenHandles",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "lint": "tsc --noemit && eslint \"{src,__tests__}/**/*.ts\" --fix",
+    "prebuild": "rimraf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build && cp -r ./dist/* .",
+    "postpublish": "git clean -fd"
+  },
+  "files": [
+    "*.{js,d.ts}",
+    "!jest.config.js",
+    "!.eslintrc.js"
+  ],
+  "engineStrict": true,
+  "engines": {
+    "node": ">= 14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamolegga/nestjs-saga.git"
+  },
+  "keywords": [
+    "nestjs",
+    "nest",
+    "saga"
+  ],
+  "author": "iamolegga <iamolegga@gmail.com> (http://github.com/iamolegga)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iamolegga/nestjs-saga/issues"
+  },
+  "homepage": "https://github.com/iamolegga/nestjs-saga#readme",
+  "devDependencies": {
+    "@nestjs/common": "^9.0.5",
+    "@nestjs/core": "^9.0.5",
+    "@nestjs/cqrs": "^9.0.1",
+    "@nestjs/platform-express": "^9.0.11",
+    "@testdeck/jest": "^0.2.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^14.18.22",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^27.5.1",
+    "prettier": "^2.7.1",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.5.6",
+    "supertest": "^6.2.4",
+    "ts-jest": "^27.1.5",
+    "ts-loader": "^9.3.1",
+    "ts-node": "^10.9.1",
+    "tslint": "^6.1.3",
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0 || ^9.0.0",
+    "@nestjs/core": "^8.0.0 || ^9.0.0",
+    "@nestjs/cqrs": "^8.0.0 || ^9.0.0"
+  }
+}
