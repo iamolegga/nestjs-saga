@@ -1,7 +1,7 @@
 {
   "name": "nestjs-saga",
   "version": "0.1.0",
-  "description": "Implementation of saga pattern for NestJS microservices",
+  "description": "Implementation of saga pattern for NestJS",
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose -i --detectOpenHandles",
