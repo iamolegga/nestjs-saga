@@ -133,25 +133,27 @@ function wrapIfNotError(x: unknown): Error {
 
 type Cond<IF, THEN, ELSE> = IF extends void ? ELSE : THEN;
 
-type StepResult<T, R> = {
+type BuilderMethodStepResult<T, R> = {
   invoke: (method: Fn<T>) => NextOptions<T, R> & {
     withCompensation: (method: Fn<T>) => NextOptions<T, R>;
   };
 };
 
+type BuilderMethodReturnResult<T, R> = { build: () => Saga<T, R> };
+
 type NextOptions<T, R> = {
-  step: (name?: string) => StepResult<T, R>;
+  step: (name?: string) => BuilderMethodStepResult<T, R>;
 } & Cond<
   R,
-  { return: (method: Fn<T, R>) => ReturnType<SagaBuilder<T, R>['return']> },
-  { build: () => ReturnType<SagaBuilder<T, R>['build']> }
+  { return: (method: Fn<T, R>) => BuilderMethodReturnResult<T, R> },
+  { build: () => Saga<T, R> }
 >;
 
 export class SagaBuilder<T, R = void> {
   private steps: Step<T>[] = [];
   private returnFn: Fn<T, R> = (() => void 0 as unknown) as Fn<T, R>;
 
-  step(name = ''): StepResult<T, R> {
+  step(name = ''): BuilderMethodStepResult<T, R> {
     return {
       invoke: (
         method: Fn<T>,
@@ -183,7 +185,7 @@ export class SagaBuilder<T, R = void> {
     };
   }
 
-  private return(method: Fn<T, R>) {
+  private return(method: Fn<T, R>): BuilderMethodReturnResult<T, R> {
     this.returnFn = method;
     return { build: () => this.build() };
   }
