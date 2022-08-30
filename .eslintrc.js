@@ -16,7 +16,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js', '**/typeorm/migrations/*'],
+  ignorePatterns: ['.eslintrc.js'],
   rules: {
     '@typescript-eslint/no-explicit-any': [
       'error',

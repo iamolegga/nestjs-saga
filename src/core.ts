@@ -133,8 +133,14 @@ function wrapIfNotError(x: unknown): Error {
 
 type Cond<IF, THEN, ELSE> = IF extends void ? ELSE : THEN;
 
+type StepResult<T, R> = {
+  invoke: (method: Fn<T>) => NextOptions<T, R> & {
+    withCompensation: (method: Fn<T>) => NextOptions<T, R>;
+  };
+};
+
 type NextOptions<T, R> = {
-  step: (name?: string) => ReturnType<SagaBuilder<T, R>['step']>;
+  step: (name?: string) => StepResult<T, R>;
 } & Cond<
   R,
   { return: (method: Fn<T, R>) => ReturnType<SagaBuilder<T, R>['return']> },
@@ -145,7 +151,7 @@ export class SagaBuilder<T, R = void> {
   private steps: Step<T>[] = [];
   private returnFn: Fn<T, R> = (() => void 0 as unknown) as Fn<T, R>;
 
-  step(name = '') {
+  step(name = ''): StepResult<T, R> {
     return {
       invoke: (
         method: Fn<T>,
@@ -158,11 +164,11 @@ export class SagaBuilder<T, R = void> {
         );
         this.steps.push(step);
 
-        const nextOptions: NextOptions<T, R> = {
+        const nextOptions = {
           step: (name = '') => this.step(name),
           return: (method: Fn<T, R>) => this.return(method),
           build: () => this.build(),
-        };
+        } as NextOptions<T, R>;
 
         return {
           ...nextOptions,
@@ -170,6 +176,8 @@ export class SagaBuilder<T, R = void> {
             step.compensation = method;
             return nextOptions;
           },
+        } as NextOptions<T, R> & {
+          withCompensation: (method: Fn<T>) => NextOptions<T, R>;
         };
       },
     };
