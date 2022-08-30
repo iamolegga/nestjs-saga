@@ -5,7 +5,7 @@
     <img alt="npm" src="https://img.shields.io/npm/v/nestjs-saga" />
   </a>
   <a href="https://github.com/iamolegga/nestjs-saga/actions">
-    <img alt="GitHub branch checks state" src="https://badgen.net/github/checks/iamolegga/nestjs-saga">
+    <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/iamolegga/nestjs-saga/on-push/main">
   </a>
   <a href="https://codeclimate.com/github/iamolegga/nestjs-saga/test_coverage">
     <img src="https://api.codeclimate.com/v1/badges/6dccfddb7042674eb005/test_coverage" />
@@ -148,7 +148,7 @@ class AnyServiceOrController {
         e.step // can be used to understand which step failed
 
       } else if (e instanceof SagaCompensationError) {
-        // Saga failed but all compensations succeeded.
+        // Saga failed and one of compensations failed.
         e.originalError // could be used to get access to original error
         e.step // can be used to understand which step compensation failed
       }
