@@ -17,6 +17,7 @@ class TestSaga {
 
   buildResult(cmd: TestCmd): TestCmdResult {
     expect(cmd).toBeInstanceOf(TestCmd);
+    expect(this).toBeInstanceOf(TestSaga);
     return new TestCmdResult();
   }
 }

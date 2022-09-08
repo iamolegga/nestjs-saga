@@ -16,22 +16,46 @@ export class SagaCompensationError extends Error {
 
 export type Fn<I, O = void> = (input: I) => Promise<O> | O;
 
-class Step<T> {
-  compensation?: Fn<T>;
+class Step<T, R = void> {
+  private __compensate?: Fn<T, R> | undefined;
+  private compensationName = '';
+  private finalName = '';
 
-  constructor(readonly name: string, public invocation: Fn<T>) {}
+  constructor(
+    private stepName: string,
+    private index: number,
+    public invocation: Fn<T, R>,
+  ) {
+    this.finalName = this.stepName || invocation.name || `step${index}`;
+  }
 
-  async invoke(params: T): Promise<void> {
+  get name(): string {
+    return this.finalName;
+  }
+
+  get hasCompensation(): boolean {
+    return !!this.__compensate;
+  }
+
+  async invoke(params: T): Promise<R> {
     return this.invocation(params);
   }
 
-  async compensate(params: T): Promise<void> {
-    if (this.compensation) return this.compensation(params);
+  compensate(i: T): Promise<R> | R {
+    this.finalName = this.compensationName;
+    // hasCompensation getter is called before
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.__compensate!(i);
+  }
+
+  setCompensation(value: Fn<T, R>) {
+    this.compensationName = this.stepName || value.name || `step${this.index}`;
+    this.__compensate = value;
   }
 
   bind(ctx: unknown): this {
     this.invocation = this.invocation.bind(ctx);
-    if (this.compensation) this.compensation = this.compensation.bind(ctx);
+    if (this.__compensate) this.__compensate = this.__compensate.bind(ctx);
     return this;
   }
 }
@@ -39,11 +63,11 @@ class Step<T> {
 class SagaFlow<T, R> {
   private readonly compensationSteps: Step<T>[] = [];
   private __current!: Step<T>;
+  private __returnFnName: string;
 
-  constructor(
-    private readonly steps: Step<T>[],
-    private readonly returnFn: Fn<T, R>,
-  ) {}
+  constructor(private readonly steps: Step<T>[], private returnFn: Fn<T, R>) {
+    this.__returnFnName = returnFn.name || 'return';
+  }
 
   get current(): Step<T> {
     return this.__current;
@@ -55,11 +79,19 @@ class SagaFlow<T, R> {
       await step.invoke(params);
       this.compensationSteps.push(step);
     }
-    return this.returnFn(params);
+    const step = new Step(
+      this.__returnFnName,
+      this.steps.length,
+      this.returnFn,
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.__current = step as any;
+    return step.invoke(params);
   }
 
   async compensate(params: T): Promise<void> {
     for (const step of this.compensationSteps.reverse()) {
+      if (!step.hasCompensation) continue;
       this.__current = step;
       await step.compensate(params);
     }
@@ -67,6 +99,7 @@ class SagaFlow<T, R> {
 
   bind(ctx: unknown): this {
     this.steps.forEach((step) => step.bind(ctx));
+    this.returnFn = this.returnFn.bind(ctx);
     return this;
   }
 }
@@ -96,12 +129,10 @@ export class Saga<T, R> {
       this.__status = SagaStatus.Complete;
       return result;
     } catch (e) {
+      const invokeErrStepName = this.sagaFlow.current.name;
       this.__status = SagaStatus.InCompensation;
       await this.runCompensationFlow(params);
-      throw new SagaInvocationError(
-        wrapIfNotError(e),
-        this.sagaFlow.current.name,
-      );
+      throw new SagaInvocationError(wrapIfNotError(e), invokeErrStepName);
     }
   }
 
@@ -160,10 +191,7 @@ export class SagaBuilder<T, R = void> {
       ): NextOptions<T, R> & {
         withCompensation: (method: Fn<T>) => NextOptions<T, R>;
       } => {
-        const step = new Step(
-          name || method.name || `step${this.steps.length}`,
-          method,
-        );
+        const step = new Step(name, this.steps.length, method);
         this.steps.push(step);
 
         const nextOptions = {
@@ -175,7 +203,7 @@ export class SagaBuilder<T, R = void> {
         return {
           ...nextOptions,
           withCompensation: (method: Fn<T>) => {
-            step.compensation = method;
+            step.setCompensation(method);
             return nextOptions;
           },
         } as NextOptions<T, R> & {

@@ -45,7 +45,7 @@ export abstract class Base {
     })
     class AppModule {}
 
-    this.app = await NestFactory.create(AppModule);
+    this.app = await NestFactory.create(AppModule, { logger: false });
     const port = await getFreePort();
     await this.app.listen(port);
   }
