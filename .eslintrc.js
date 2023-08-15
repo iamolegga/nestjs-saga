@@ -49,7 +49,6 @@ module.exports = {
         "signature",
         "public-abstract-field",
         "protected-abstract-field",
-        "private-abstract-field",
         "public-decorated-field",
         "public-instance-field",
         "protected-decorated-field",
@@ -81,9 +80,6 @@ module.exports = {
         "protected-decorated-method",
         "protected-instance-method",
 
-        "private-abstract-get",
-        "private-abstract-set",
-        "private-abstract-method",
         "private-decorated-get",
         "private-instance-get",
         "private-decorated-set",

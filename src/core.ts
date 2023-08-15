@@ -1,5 +1,8 @@
 export class SagaInvocationError extends Error {
-  constructor(readonly originalError: Error, readonly step: string) {
+  constructor(
+    readonly originalError: Error,
+    readonly step: string,
+  ) {
     super(originalError.message);
     Object.setPrototypeOf(this, SagaInvocationError.prototype);
     this.stack = originalError.stack;
@@ -7,7 +10,10 @@ export class SagaInvocationError extends Error {
 }
 
 export class SagaCompensationError extends Error {
-  constructor(readonly originalError: Error, readonly step: string) {
+  constructor(
+    readonly originalError: Error,
+    readonly step: string,
+  ) {
     super(originalError.message);
     Object.setPrototypeOf(this, SagaCompensationError.prototype);
     this.stack = originalError.stack;
@@ -65,7 +71,10 @@ class SagaFlow<T, R> {
   private __current!: Step<T>;
   private __returnFnName: string;
 
-  constructor(private readonly steps: Step<T>[], private returnFn: Fn<T, R>) {
+  constructor(
+    private readonly steps: Step<T>[],
+    private returnFn: Fn<T, R>,
+  ) {
     this.__returnFnName = returnFn.name || 'return';
   }
 

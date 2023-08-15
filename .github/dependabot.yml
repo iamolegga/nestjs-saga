@@ -9,3 +9,5 @@ updates:
   ignore:
     - dependency-name: '@types/node'
       versions: [">= 15.0.0"]
+    - dependency-name: 'typescript'
+      versions: [">= 5.0.0"]
