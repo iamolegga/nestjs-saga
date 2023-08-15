@@ -4,6 +4,9 @@
   <a href="https://www.npmjs.com/package/nestjs-saga">
     <img alt="npm" src="https://img.shields.io/npm/v/nestjs-saga" />
   </a>
+  <a href="https://www.npmjs.com/package/nestjs-saga">
+    <img alt="npm" src="https://img.shields.io/npm/dm/nestjs-saga" />
+  </a>
   <a href="https://github.com/iamolegga/nestjs-saga/actions">
     <img alt="GitHub branch checks state" src="https://badgen.net/github/checks/iamolegga/nestjs-saga" />
   </a>
@@ -156,3 +159,7 @@ class AnyServiceOrController {
   }
 }
 ```
+
+<h2 align="center">Do you use this library?<br/>Don't be shy to give it a star! ★</h2>
+
+<h3 align="center">Also if you are into NestJS you might be interested in one of my <a href="https://github.com/iamolegga#nestjs">other NestJS libs</a>.</h3>
