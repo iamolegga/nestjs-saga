@@ -5,13 +5,13 @@
     <img alt="npm" src="https://img.shields.io/npm/v/nestjs-saga" />
   </a>
   <a href="https://github.com/iamolegga/nestjs-saga/actions">
-    <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/iamolegga/nestjs-saga/on-push/main">
+    <img alt="GitHub branch checks state" src="https://badgen.net/github/checks/iamolegga/nestjs-saga" />
   </a>
   <a href="https://codeclimate.com/github/iamolegga/nestjs-saga/test_coverage">
     <img src="https://api.codeclimate.com/v1/badges/6dccfddb7042674eb005/test_coverage" />
   </a>
   <a href="https://snyk.io/test/github/iamolegga/nestjs-saga">
-    <img alt="Snyk Vulnerabilities for npm package" src="https://img.shields.io/snyk/vulnerabilities/npm/nestjs-saga" />
+    <img alt="Known Vulnerabilities" src="https://snyk.io/test/github/iamolegga/nestjs-saga/badge.svg" />
   </a>
   <a href="https://libraries.io/npm/nestjs-saga">
     <img alt="Libraries.io" src="https://img.shields.io/librariesio/release/npm/nestjs-saga">

@@ -28,7 +28,10 @@ class TestCmd {}
 class TestSaga {
   saga = new Builder<TestCmd>().step('1').invoke(this.step1).build();
 
-  constructor(private foo: Foo, private bar: Bar) {}
+  constructor(
+    private foo: Foo,
+    private bar: Bar,
+  ) {}
 
   step1(_: TestCmd) {
     this.foo.foo();
