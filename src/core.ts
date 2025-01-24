@@ -50,7 +50,7 @@ class Step<T, R = void> {
   compensate(i: T): Promise<R> | R {
     this.finalName = this.compensationName;
     // hasCompensation getter is called before
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     return this.__compensate!(i);
   }
 

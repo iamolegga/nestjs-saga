@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { Injectable, Module } from '@nestjs/common';
 import { suite, test } from '@testdeck/jest';
 
