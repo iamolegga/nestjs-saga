@@ -38,7 +38,7 @@
   "homepage": "https://github.com/iamolegga/nestjs-saga#readme",
   "devDependencies": {
     "@nestjs/common": "^10.1.3",
-    "@nestjs/core": "^10.1.3",
+    "@nestjs/core": "^11.0.5",
     "@nestjs/cqrs": "^11.0.0",
     "@nestjs/platform-express": "^10.1.3",
     "@testdeck/jest": "^0.3.3",
