@@ -45,9 +45,7 @@ export class SagaModule {
           );
 
           @CommandHandler(cmdType)
-          class SagaCommandHandler
-            implements ICommandHandler<InstanceType<typeof cmdType>>
-          {
+          class SagaCommandHandler {
             constructor(private moduleRef: ModuleRef) {}
 
             async execute(cmd: any) {
