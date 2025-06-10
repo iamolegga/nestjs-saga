@@ -46,7 +46,7 @@
     "@nestjs/platform-express": "^11.0.5",
     "@testdeck/jest": "^0.3.3",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.10.10",
+    "@types/node": "^24.0.0",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.21.0",
     "@typescript-eslint/parser": "^8.21.0",
