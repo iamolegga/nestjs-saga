@@ -1,7 +1,7 @@
-export { Saga, SagaModule, SagaModuleRegisterParams } from './nest';
 export {
+  SagaBuilder as Builder,
   SagaCompensationError,
   SagaInvocationError,
   SagaStatus,
-  SagaBuilder as Builder,
 } from './core';
+export { Saga, SagaModule, SagaModuleRegisterParams } from './nest';

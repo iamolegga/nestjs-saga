@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Controller, Get, INestApplication, Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { CommandBus, CqrsModule } from '@nestjs/cqrs';
@@ -13,16 +12,15 @@ export abstract class Base {
   abstract params: SagaModuleRegisterParams;
 
   protected app!: INestApplication;
-  protected error?: any;
-  protected result?: any;
+  error?: any;
+  result?: any;
 
   async before() {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
     delete this.error;
 
     const cmd = this.cmd;
 
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const suite = this;
 
     @Controller('/')
@@ -54,7 +52,27 @@ export abstract class Base {
     await this.app.close();
   }
 
-  protected async run() {
+  async run() {
     return request(this.app.getHttpServer()).get('/');
   }
+}
+
+/**
+ * Wires a `Base` subclass into vitest's lifecycle the way the `@testdeck`
+ * `@suite` decorator used to: a fresh instance per test, `before` as
+ * `beforeEach` and `after` as `afterEach`.
+ */
+export function useSuite<T extends Base>(factory: () => T): () => T {
+  let instance: T;
+
+  beforeEach(async () => {
+    instance = factory();
+    await instance.before();
+  });
+
+  afterEach(async () => {
+    await instance.after();
+  });
+
+  return () => instance;
 }

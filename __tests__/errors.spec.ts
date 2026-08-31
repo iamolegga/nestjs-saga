@@ -1,5 +1,3 @@
-import { suite, test } from '@testdeck/jest';
-
 import {
   Builder,
   Saga,
@@ -7,7 +5,7 @@ import {
   SagaInvocationError,
 } from '../src';
 
-import { Base } from './base';
+import { Base, useSuite } from './base';
 
 class TestCmd {}
 class TestCmdResult {}
@@ -62,80 +60,83 @@ class TestSaga {
   }
 }
 
-@suite
-export class Return extends Base {
+class Return extends Base {
   cmd = new TestCmd();
   params = { sagas: [TestSaga] };
+}
 
-  @test
-  async 'invocation: unnamed step + anonymous fn'() {
+describe('Return', () => {
+  const getSuite = useSuite(() => new Return());
+
+  it('invocation: unnamed step + anonymous fn', async () => {
+    const suite = getSuite();
     reset();
     TestSaga.throwOnInvocation = 0;
-    await this.run();
-    expect(this.error).toBeInstanceOf(SagaInvocationError);
-    expect((this.error as SagaInvocationError).step).toBe('step0');
-  }
+    await suite.run();
+    expect(suite.error).toBeInstanceOf(SagaInvocationError);
+    expect((suite.error as SagaInvocationError).step).toBe('step0');
+  });
 
-  @test
-  async 'invocation: step with name'() {
+  it('invocation: step with name', async () => {
+    const suite = getSuite();
     reset();
     TestSaga.throwOnInvocation = 1;
-    await this.run();
-    expect(this.error).toBeInstanceOf(SagaInvocationError);
-    expect((this.error as SagaInvocationError).step).toBe('named');
-  }
+    await suite.run();
+    expect(suite.error).toBeInstanceOf(SagaInvocationError);
+    expect((suite.error as SagaInvocationError).step).toBe('named');
+  });
 
-  @test
-  async 'invocation: unnamed step + class method'() {
+  it('invocation: unnamed step + class method', async () => {
+    const suite = getSuite();
     reset();
     TestSaga.throwOnInvocation = 2;
-    await this.run();
-    expect(this.error).toBeInstanceOf(SagaInvocationError);
-    expect((this.error as SagaInvocationError).step).toBe(
+    await suite.run();
+    expect(suite.error).toBeInstanceOf(SagaInvocationError);
+    expect((suite.error as SagaInvocationError).step).toBe(
       TestSaga.prototype.classMethodInvoke.name,
     );
-  }
+  });
 
-  @test
-  async 'on result'() {
+  it('on result', async () => {
+    const suite = getSuite();
     reset();
     TestSaga.throwOnResult = true;
-    await this.run();
-    expect(this.error).toBeInstanceOf(SagaInvocationError);
-    expect((this.error as SagaInvocationError).step).toBe(
+    await suite.run();
+    expect(suite.error).toBeInstanceOf(SagaInvocationError);
+    expect((suite.error as SagaInvocationError).step).toBe(
       TestSaga.prototype.buildResult.name,
     );
-  }
+  });
 
-  @test
-  async 'compensation: unnamed step + anonymous fn'() {
+  it('compensation: unnamed step + anonymous fn', async () => {
+    const suite = getSuite();
     reset();
     TestSaga.throwOnInvocation = 1;
     TestSaga.throwOnCompensation = 0;
-    await this.run();
-    expect(this.error).toBeInstanceOf(SagaCompensationError);
-    expect((this.error as SagaCompensationError).step).toBe('step0');
-  }
+    await suite.run();
+    expect(suite.error).toBeInstanceOf(SagaCompensationError);
+    expect((suite.error as SagaCompensationError).step).toBe('step0');
+  });
 
-  @test
-  async 'compensation: step with name'() {
+  it('compensation: step with name', async () => {
+    const suite = getSuite();
     reset();
     TestSaga.throwOnInvocation = 2;
     TestSaga.throwOnCompensation = 1;
-    await this.run();
-    expect(this.error).toBeInstanceOf(SagaCompensationError);
-    expect((this.error as SagaCompensationError).step).toBe('named');
-  }
+    await suite.run();
+    expect(suite.error).toBeInstanceOf(SagaCompensationError);
+    expect((suite.error as SagaCompensationError).step).toBe('named');
+  });
 
-  @test
-  async 'compensation: unnamed step + class method'() {
+  it('compensation: unnamed step + class method', async () => {
+    const suite = getSuite();
     reset();
     TestSaga.throwOnResult = true;
     TestSaga.throwOnCompensation = 2;
-    await this.run();
-    expect(this.error).toBeInstanceOf(SagaCompensationError);
-    expect((this.error as SagaCompensationError).step).toBe(
+    await suite.run();
+    expect(suite.error).toBeInstanceOf(SagaCompensationError);
+    expect((suite.error as SagaCompensationError).step).toBe(
       TestSaga.prototype.classMethodCompensate.name,
     );
-  }
-}
+  });
+});

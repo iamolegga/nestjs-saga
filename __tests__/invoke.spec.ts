@@ -1,8 +1,6 @@
-import { suite, test } from '@testdeck/jest';
-
 import { Builder, Saga } from '../src';
 
-import { Base } from './base';
+import { Base, useSuite } from './base';
 
 class TestCmd {}
 
@@ -36,46 +34,49 @@ class TestSaga {
   }
 }
 
-@suite
-export class Invoke extends Base {
+class Invoke extends Base {
   cmd = new TestCmd();
   params = { sagas: [TestSaga] };
+}
 
-  @test
-  async works() {
+describe('Invoke', () => {
+  const getSuite = useSuite(() => new Invoke());
+
+  it('works', async () => {
+    const suite = getSuite();
     TestSaga.throws = false;
 
-    const step1 = jest.spyOn(TestSaga.prototype, 'step1');
-    const step2 = jest.spyOn(TestSaga.prototype, 'step2');
-    const step3 = jest.spyOn(TestSaga.prototype, 'step3');
+    const step1 = vi.spyOn(TestSaga.prototype, 'step1');
+    const step2 = vi.spyOn(TestSaga.prototype, 'step2');
+    const step3 = vi.spyOn(TestSaga.prototype, 'step3');
 
-    await this.run();
+    await suite.run();
 
     expect(step1).toHaveBeenCalledTimes(1);
-    expect(step1).toHaveBeenCalledWith(this.cmd);
+    expect(step1).toHaveBeenCalledWith(suite.cmd);
     expect(step2).toHaveBeenCalledTimes(1);
-    expect(step2).toHaveBeenCalledWith(this.cmd);
+    expect(step2).toHaveBeenCalledWith(suite.cmd);
     expect(step3).toHaveBeenCalledTimes(1);
-    expect(step3).toHaveBeenCalledWith(this.cmd);
-    expect(this.result).toBeUndefined();
-  }
+    expect(step3).toHaveBeenCalledWith(suite.cmd);
+    expect(suite.result).toBeUndefined();
+  });
 
-  @test
-  async throws() {
+  it('throws', async () => {
+    const suite = getSuite();
     TestSaga.throws = true;
 
-    const step1 = jest.spyOn(TestSaga.prototype, 'step1');
-    const step2 = jest.spyOn(TestSaga.prototype, 'step2');
-    const step3 = jest.spyOn(TestSaga.prototype, 'step3');
+    const step1 = vi.spyOn(TestSaga.prototype, 'step1');
+    const step2 = vi.spyOn(TestSaga.prototype, 'step2');
+    const step3 = vi.spyOn(TestSaga.prototype, 'step3');
 
-    await this.run();
+    await suite.run();
 
     expect(step1).toHaveBeenCalledTimes(1);
-    expect(step1).toHaveBeenCalledWith(this.cmd);
+    expect(step1).toHaveBeenCalledWith(suite.cmd);
     expect(step2).toHaveBeenCalledTimes(1);
-    expect(step2).toHaveBeenCalledWith(this.cmd);
+    expect(step2).toHaveBeenCalledWith(suite.cmd);
     expect(step3).toHaveBeenCalledTimes(0);
-    expect(this.result).toBeUndefined();
-    expect(this.error).toBeInstanceOf(Error);
-  }
-}
+    expect(suite.result).toBeUndefined();
+    expect(suite.error).toBeInstanceOf(Error);
+  });
+});

@@ -8,10 +8,10 @@
     <img alt="npm" src="https://img.shields.io/npm/dm/nestjs-saga" />
   </a>
   <a href="https://github.com/iamolegga/nestjs-saga/actions">
-    <img alt="GitHub branch checks state" src="https://badgen.net/github/checks/iamolegga/nestjs-saga" />
+    <img alt="GitHub branch checks state" src="https://badgen.net/github/checks/iamolegga/nestjs-saga/main">
   </a>
-  <a href="https://codeclimate.com/github/iamolegga/nestjs-saga/test_coverage">
-    <img src="https://api.codeclimate.com/v1/badges/6dccfddb7042674eb005/test_coverage" />
+  <a href="https://qlty.sh/gh/iamolegga/projects/nestjs-saga">
+    <img src="https://qlty.sh/gh/iamolegga/projects/nestjs-saga/coverage.svg" alt="Code Coverage" />
   </a>
   <a href="https://snyk.io/test/github/iamolegga/nestjs-saga">
     <img alt="Known Vulnerabilities" src="https://snyk.io/test/github/iamolegga/nestjs-saga/badge.svg" />
@@ -27,6 +27,17 @@ Basic implementation of saga pattern for NestJS (do not confuse it with the [bui
 This module is not too much related to [microservices sagas](https://microservices.io/patterns/data/saga.html) but could be used as a base to implement it.
 
 Highly inspired by [node-sagas](https://github.com/SlavaPanevskiy/node-sagas) but rewritten a bit for more convenient usage with NestJS.
+
+---
+
+<p align="center"><b>This is the documentation for v0.4. Compatibility with earlier versions:</b></p>
+
+| nestjs-saga | NestJS       | Node.js |
+| ----------- | ------------ | ------- |
+| v0.4        | 11, 12       | >=22.12 |
+| [v0.3](https://github.com/iamolegga/nestjs-saga/tree/0.3.0#readme) | 8, 9, 10, 11 | >=18 |
+
+---
 
 ## installation
 
