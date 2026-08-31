@@ -1,9 +1,8 @@
 import { Injectable, Module } from '@nestjs/common';
-import { suite, test } from '@testdeck/jest';
 
 import { Builder, Saga } from '../src';
 
-import { Base } from './base';
+import { Base, useSuite } from './base';
 
 @Injectable()
 class Foo {
@@ -38,23 +37,26 @@ class TestSaga {
   }
 }
 
-@suite
-export class Dependencies extends Base {
+class Dependencies extends Base {
   cmd = new TestCmd();
   params = {
     sagas: [TestSaga],
     imports: [BarModule],
     providers: [Foo],
   };
+}
 
-  @test
-  async work() {
-    const foo = jest.spyOn(Foo.prototype, 'foo');
-    const bar = jest.spyOn(Bar.prototype, 'bar');
+describe('Dependencies', () => {
+  const getSuite = useSuite(() => new Dependencies());
 
-    await this.run();
+  it('work', async () => {
+    const suite = getSuite();
+    const foo = vi.spyOn(Foo.prototype, 'foo');
+    const bar = vi.spyOn(Bar.prototype, 'bar');
+
+    await suite.run();
 
     expect(foo).toHaveBeenCalledTimes(1);
     expect(bar).toHaveBeenCalledTimes(1);
-  }
-}
+  });
+});

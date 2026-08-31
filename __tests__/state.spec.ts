@@ -1,8 +1,6 @@
-import { suite, test } from '@testdeck/jest';
-
 import { Builder, Saga } from '../src';
 
-import { Base } from './base';
+import { Base, useSuite } from './base';
 
 class TestCmd {}
 
@@ -33,14 +31,17 @@ class TestSaga {
   }
 }
 
-@suite
-export class State extends Base {
+class State extends Base {
   cmd = new TestCmd();
   params = { sagas: [TestSaga] };
-
-  @test
-  async 'instance created for each command sent'() {
-    await this.run();
-    await this.run();
-  }
 }
+
+describe('State', () => {
+  const getSuite = useSuite(() => new State());
+
+  it('instance created for each command sent', async () => {
+    const suite = getSuite();
+    await suite.run();
+    await suite.run();
+  });
+});

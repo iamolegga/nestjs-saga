@@ -51,6 +51,7 @@ class Step<T, R = void> {
     this.finalName = this.compensationName;
     // hasCompensation getter is called before
 
+    // biome-ignore lint/style/noNonNullAssertion: callers check `hasCompensation` first, and `?.` would silently resolve to `undefined` instead of running the compensation.
     return this.__compensate!(i);
   }
 
@@ -93,7 +94,7 @@ class SagaFlow<T, R> {
       this.steps.length,
       this.returnFn,
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: the synthetic step wrapping the return callback resolves to `R`, not `void`, so it does not fit the `Step<T>` of the invocation chain it is reported through.
     this.__current = step as any;
     return step.invoke(params);
   }
@@ -107,7 +108,9 @@ class SagaFlow<T, R> {
   }
 
   bind(ctx: unknown): this {
-    this.steps.forEach((step) => step.bind(ctx));
+    this.steps.forEach((step) => {
+      step.bind(ctx);
+    });
     this.returnFn = this.returnFn.bind(ctx);
     return this;
   }

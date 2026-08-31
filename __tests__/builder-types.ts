@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { SagaBuilder } from '../src/core';
 
 // check saga with single step
