@@ -43,7 +43,7 @@
     "@nestjs/common": "^11.0.5",
     "@nestjs/core": "^11.0.5",
     "@nestjs/cqrs": "^11.0.0",
-    "@nestjs/platform-express": "^11.0.5",
+    "@nestjs/platform-express": "^12.0.1",
     "@testdeck/jest": "^0.3.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
