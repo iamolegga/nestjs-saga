@@ -42,7 +42,7 @@
     "@eslint/js": "^9.18.0",
     "@nestjs/common": "^11.0.5",
     "@nestjs/core": "^11.0.5",
-    "@nestjs/cqrs": "^11.0.0",
+    "@nestjs/cqrs": "^12.0.0",
     "@nestjs/platform-express": "^11.0.5",
     "@testdeck/jest": "^0.3.3",
     "@types/jest": "^30.0.0",
